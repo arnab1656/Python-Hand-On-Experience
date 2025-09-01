@@ -3,23 +3,45 @@ print("name of the moduole = ",__name__)
 import speech_recognition as sr
 import pyttsx3
 import webbrowser
+from gtts import gTTS
+import pygame
+import os
 
 r = sr.Recognizer()
-engine = pyttsx3.init()
-
 
 def speak(text):
-  engine.say(text)
-  engine.runAndWait()
+    tts = gTTS(text)
+    tts.save('temp.mp3') 
+
+    # Initialize Pygame mixer
+    pygame.mixer.init()
+
+    # Load the MP3 file
+    pygame.mixer.music.load('temp.mp3')
+
+    # Play the MP3 file
+    pygame.mixer.music.play()
+
+    # Keep the program running until the music stops playing
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+    
+    pygame.mixer.music.unload()
+    os.remove("temp.mp3") 
+
 
 def openCommand(command):
 
   if(command.lower() == "open google"):
     webbrowser.open("google.com")
+    speak("Your Google is Opened Sir")
+
   if(command.lower() == "open linkedin"):
     webbrowser.open("linkedin.com")  
+    speak("Your linkedin is Opened Sir")
+
   else:
-    print("Else Command")  
+    speak("Cannot understand the Command Sir")
 
 
 if __name__ == "__main__":
@@ -29,12 +51,14 @@ if __name__ == "__main__":
      for index, name in enumerate(sr.Microphone.list_microphone_names()):
        print(f"Device {index} : {name}")
 
+     speak("Jarvis initailized")
+
      while True:
 
       try:
 
         with sr.Microphone(device_index=17) as source:
-          print("I am Listening...")
+
           print("Speak something to catch in MircroPhone...")
 
           audio = r.listen(source, timeout=5, phrase_time_limit=5) 
@@ -44,8 +68,7 @@ if __name__ == "__main__":
 
           if "jarvis" in word.lower():
 
-            speak("Jarvis Activated")
-            print("Jarvis Activated")
+            speak("Jarvis Activated, Give me the Command Sir")
             
             with sr.Microphone(device_index=17) as source:
               audio = r.listen(source, timeout=5, phrase_time_limit=5) 
