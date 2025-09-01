@@ -11,13 +11,13 @@ r = sr.Recognizer()
 
 def speak(text):
     tts = gTTS(text)
-    tts.save('temp.mp3') 
+    tts.save('current_voice.mp3') 
 
     # Initialize Pygame mixer
     pygame.mixer.init()
 
     # Load the MP3 file
-    pygame.mixer.music.load('temp.mp3')
+    pygame.mixer.music.load('current_voice.mp3')
 
     # Play the MP3 file
     pygame.mixer.music.play()
@@ -27,7 +27,7 @@ def speak(text):
         pygame.time.Clock().tick(10)
     
     pygame.mixer.music.unload()
-    os.remove("temp.mp3") 
+    os.remove("current_voice.mp3") 
 
 
 def openCommand(command):
